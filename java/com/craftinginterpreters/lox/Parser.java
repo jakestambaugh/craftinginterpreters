@@ -57,7 +57,7 @@ class Parser {
     Expr intializer = null;
     if (match(EQUAL)) {
       intializer = expression();
-    }statement
+    }
 
     consume(SEMICOLON, "Expect ';' after variable declaration.");
     return new Stmt.Var(name, intializer);
@@ -137,7 +137,7 @@ class Parser {
     }
 
     if (match(IDENTIFIER)) {
-      return new Expr.Variable(previous())
+      return new Expr.Variable(previous());
     }
 
     if (match(LEFT_PAREN)) {
