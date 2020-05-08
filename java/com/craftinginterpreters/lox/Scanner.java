@@ -64,7 +64,7 @@ class Scanner {
         addToken(LEFT_BRACE);
         break;
       case '}':
-        addToken(RIGHT_PAREN);
+        addToken(RIGHT_BRACE);
         break;
       case ',':
         addToken(COMMA);
