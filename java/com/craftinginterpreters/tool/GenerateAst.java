@@ -18,6 +18,7 @@ public class GenerateAst {
         Arrays.asList(
             "Assign   : Token name, Expr value",
             "Binary   : Expr left, Token operator, Expr right",
+            "Call     : Expr callee, Token paren, List<Expr> arguments",
             "Grouping : Expr expression",
             "Literal  : Object value",
             "Logical  : Expr left, Token operator, Expr right",
@@ -28,11 +29,12 @@ public class GenerateAst {
         outputDir,
         "Stmt",
         Arrays.asList(
-          "Block      : List<Stmt> statements",
-          "Expression : Expr expression",
-          "If         : Expr condition, Stmt thenBranch, Stmt elseBranch",
-          "Print      : Expr expression",
-          "Var        : Token name, Expr initializer"));
+            "Block      : List<Stmt> statements",
+            "Expression : Expr expression",
+            "If         : Expr condition, Stmt thenBranch, Stmt elseBranch",
+            "Print      : Expr expression",
+            "Var        : Token name, Expr initializer",
+            "While      : Expr condition, Stmt body"));
   }
 
   private static void defineAst(String outputDir, String baseName, List<String> types)
