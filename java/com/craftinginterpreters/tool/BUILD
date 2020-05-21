@@ -16,4 +16,5 @@ java_library(
     name = "ast",
     srcs = [":ast_srcs"],
     visibility = ["//visibility:public"],
+    deps = ["//java/com/craftinginterpreters/lox:token"],
 )
