@@ -1,9 +1,41 @@
 class Doughnut {
     cook() {
+        print this.filling;
         print "Fry until golden brown.";
+    }
+
+    serve() {
+        if (this.filling != nil) {
+            print "Serving a filled doughnut!";
+        }
     }
 }
 
-class BostonCream < Doughnut {}
+class BostonCream < Doughnut {
+    init() {
+        this.filling = "custard";
+        this.topping = "chocolate";
+    }
+
+    fill() {
+        print "Fill with " + this.filling + ".";
+        super.cook();
+    }
+
+    glaze() {
+        print "Glaze with " + this.topping + ".";
+    }
+}
+
+class PittsburghCream < BostonCream {
+    init() {
+        this.filling = "white cream";
+        this.topping = "choc";
+    }
+}
 
 BostonCream().cook();
+
+var p = PittsburghCream();
+p.fill();
+p.glaze();
