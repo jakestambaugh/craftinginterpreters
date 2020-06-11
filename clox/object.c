@@ -63,8 +63,6 @@ ObjString* copyString(const char* chars, int length) {
   memcpy(heapChars, chars, length);
   heapChars[length] = '\0';
 
-  printf("%s", heapChars);
-
   return allocateString(heapChars, length, hash);
 }
 

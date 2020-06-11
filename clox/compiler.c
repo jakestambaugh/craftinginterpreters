@@ -128,7 +128,7 @@ static uint8_t makeConstant(Value value) {
 
 static void emitConstant(Value value) {
   emitBytes(OP_CONSTANT, makeConstant(value));
-} 
+}
 
 static void endCompiler() {
   emitReturn();
@@ -203,7 +203,6 @@ static void number() {
 }
 
 static void string() {
-  printf("%.*s\n", parser.previous.length, parser.previous.start);
   emitConstant(OBJ_VAL(copyString(parser.previous.start + 1,
                                   parser.previous.length - 2)));
 }
@@ -232,7 +231,7 @@ static void unary() {
   }
 }
 
-ParseRule rules[] = {                                              
+ParseRule rules[] = {
   { grouping, NULL,    PREC_NONE },       // TOKEN_LEFT_PAREN
   { NULL,     NULL,    PREC_NONE },       // TOKEN_RIGHT_PAREN
   { NULL,     NULL,    PREC_NONE },       // TOKEN_LEFT_BRACE
@@ -341,7 +340,7 @@ static void synchronize() {
       case TOKEN_PRINT:
       case TOKEN_RETURN:
         return;
-      
+
       default:
         // Do nothing.
         ;
@@ -375,7 +374,7 @@ bool compile(const char* source, Chunk* chunk) {
   parser.panicMode = false;
 
   advance();
-  
+
   while (!match(TOKEN_EOF)) {
     declaration();
   }
