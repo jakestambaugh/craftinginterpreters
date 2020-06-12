@@ -1,6 +1,9 @@
 {
     var a = "outer";
     {
-        var a = a;
+        var b = a;
+        var c = a + b;
+        print c;
     }
+    print a;
 }
