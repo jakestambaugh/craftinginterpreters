@@ -1,0 +1,21 @@
+fun outer() {
+  var a = 1;
+  var b = 2;
+  var i;
+  {
+    var c = 3;
+    var d = 4;
+    fun inner() {
+      print a;
+      print c;
+      print b;
+      print d;
+      print a + c + b + d;
+    }
+    i = inner;
+  }
+  return i;
+}
+
+var x = outer;
+x()();
