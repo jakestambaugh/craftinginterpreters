@@ -9,7 +9,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/bazel-bin/clox/clox",
-            "args": ["${workspaceFolder}/clox/scripts/outer.lox"],
+            "args": ["${workspaceFolder}/clox/scripts/closure3.lox"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],

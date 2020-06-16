@@ -1,0 +1,17 @@
+fun outer(q) {
+  var y = "out";
+  var z = "side";
+  fun inner() {
+    print q + y + z;
+  }
+
+  z = "doors";
+
+  return inner;
+}
+
+var closure = outer("let's go ");
+closure();
+
+var clover = outer("I hate the ");
+clover();
