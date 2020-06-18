@@ -238,7 +238,6 @@ static void endScope() {
     } else {
       emitByte(OP_POP);
     }
-    emitByte(OP_POP);
     current->localCount--;
   }
 }
