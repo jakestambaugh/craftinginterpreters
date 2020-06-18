@@ -1,0 +1,8 @@
+{
+  var x = 1;
+  fun inner() {
+    x = x + 1;
+    print x;
+  }
+  inner();
+}
