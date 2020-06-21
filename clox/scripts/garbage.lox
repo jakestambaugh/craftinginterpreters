@@ -1,0 +1,19 @@
+var garbage = "This is a very long string that will need to be deleted very soon";
+var b = "I hope that the garbage collector finds this string";
+
+print garbage + b;
+var cat = "cat";
+
+for (var x = 0; x < 5; x = x + 1) {
+    cat = cat + cat;
+}
+
+var a = "Yo";
+
+fun printer() {
+    print "More strings to allocate";
+}
+
+printer();
+printer();
+printer();
