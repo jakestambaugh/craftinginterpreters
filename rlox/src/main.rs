@@ -66,5 +66,8 @@ fn run(program: &str) -> std::io::Result<()> {
     let mut scanner = Scanner::from_source(program);
     let tokens = scanner.scan_tokens();
     // For now, print the tokens
+    for token in tokens.iter() {
+        println!("{:?}", token);
+    }
     Ok(())
 }
