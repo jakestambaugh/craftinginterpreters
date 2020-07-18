@@ -1,6 +1,30 @@
 use crate::lexer::token::{Token, TokenType};
 use crate::lexer::literal::Literal;
 use std::iter::FromIterator;
+use std::collections::HashMap;
+
+lazy_static!{
+    static ref KEYWORDS: HashMap<&'static str, TokenType> = {
+        let mut keywords = HashMap::new();
+        keywords.insert("and", TokenType::And);
+        keywords.insert("class", TokenType::Class);
+        keywords.insert("else", TokenType::Else);
+        keywords.insert("false", TokenType::False);
+        keywords.insert("for", TokenType::For);
+        keywords.insert("fun", TokenType::Fun);
+        keywords.insert("if", TokenType::If);
+        keywords.insert("nil", TokenType::Nil);
+        keywords.insert("or", TokenType::Or);
+        keywords.insert("print", TokenType::Print);
+        keywords.insert("return", TokenType::Return);
+        keywords.insert("super", TokenType::Super);
+        keywords.insert("this", TokenType::This);
+        keywords.insert("true", TokenType::True);
+        keywords.insert("var", TokenType::Var);
+        keywords.insert("while", TokenType::While);
+        keywords
+    };
+}
 
 pub struct Scanner<'a> {
     source: &'a [u8],
@@ -47,7 +71,6 @@ impl Scanner<'_> {
             '-' => TokenType::Minus,
             '+' => TokenType::Plus,
             ';' => TokenType::Semicolon,
-            '/' => TokenType::Slash,
             '*' => TokenType::Star,
 
             '!' => {
@@ -64,22 +87,42 @@ impl Scanner<'_> {
                     TokenType::Equal
                 }
             }
-            '>'  => {
+            '>' => {
                 if self.match_current('=') {
                     TokenType::GreaterEqual
                 } else {
                     TokenType::Greater
                 }
             }
-            '<'  => {
+            '<' => {
                 if self.match_current('=') {
                     TokenType::LessEqual
                 } else {
                     TokenType::Less
                 }
-            }            
+            }
+            '/' => {
+                if self.match_current('/') {
+                    while self.peek() != '\n' && !self.is_at_end() {
+                        self.advance();
+                    }
+                    TokenType::Skip
+                } else if self.match_current('*') {
+                    while !(self.peek() == '*' && self.peek_next() == '/') && !self.is_at_end() {
+                        self.advance();
+                    }
+                    // Consume the closing */ characters.
+                    self.advance();
+                    self.advance();
+                    TokenType::Skip
+                } else {
+                    TokenType::Slash
+                }
+            }
 
             'a'..='z' | 'A'..='Z' => TokenType::Identifier(super::Literal::LoxIdentifier(String::from("Identifier"))),
+
+
 
             '"' => {
                 let mut lexeme = vec![];

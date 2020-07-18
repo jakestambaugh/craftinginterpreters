@@ -49,6 +49,9 @@ pub enum TokenType {
     While,
 
     EOF,
+
+    // TODO: this skip should probably be removed in favor of an Option<TokenType> since it represents a line of source that should be skipped by the parser
+    Skip,
 }
 
 #[derive(Debug)]
