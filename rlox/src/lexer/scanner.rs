@@ -1,9 +1,9 @@
-use crate::lexer::token::{Token, TokenType};
 use crate::lexer::literal::Literal;
-use std::iter::FromIterator;
+use crate::lexer::token::{Token, TokenType};
 use std::collections::HashMap;
+use std::iter::FromIterator;
 
-lazy_static!{
+lazy_static! {
     static ref KEYWORDS: HashMap<&'static str, TokenType> = {
         let mut keywords = HashMap::new();
         keywords.insert("and", TokenType::And);
@@ -26,7 +26,15 @@ lazy_static!{
     };
 }
 
+/** Scanner wraps a string of source code characters without taking ownership. The lifetime
+   annotation 'a says that the Scanner has the same lifetime as the source string.
+   It may make more sense to turn this into an Iterator or a Stream of characters in the future
+   so that the entire source file doesn't have to stay in memory throughout parsing.
+
+   The scanner should own the vector of new tokens until the end of parsing.
+*/
 pub struct Scanner<'a> {
+    // https://stackoverflow.com/questions/24542115/how-to-index-a-string-in-rust
     source: &'a [u8],
     tokens: Vec<Token>,
 
@@ -36,6 +44,8 @@ pub struct Scanner<'a> {
 }
 
 impl Scanner<'_> {
+    /* Wraps a string in a scanner
+     */
     pub fn from_source<'a>(source: &'a str) -> Scanner<'a> {
         Scanner {
             source: source.as_bytes(),
@@ -120,9 +130,9 @@ impl Scanner<'_> {
                 }
             }
 
-            'a'..='z' | 'A'..='Z' => TokenType::Identifier(super::Literal::LoxIdentifier(String::from("Identifier"))),
-
-
+            'a'..='z' | 'A'..='Z' => {
+                TokenType::Identifier(super::Literal::LoxIdentifier(String::from("Identifier")))
+            }
 
             '"' => {
                 let mut lexeme = vec![];
