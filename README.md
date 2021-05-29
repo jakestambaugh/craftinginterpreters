@@ -1,6 +1,6 @@
 # Lox Programming Language
 
-Two implementations of the Lox Programming Language from the book _[Crafting Interpreters](http://craftinginterpreters.com/)_ by Bob Nystrom. This repo is my implementation as I worked through the textbook. The reference implementations (as well as the source for the book) can be found at (github.com/munificent/craftinginterpreters).
+Two implementations of the Lox Programming Language from the book _[Crafting Interpreters](http://craftinginterpreters.com/)_ by Bob Nystrom. This repo is my implementation as I worked through the textbook. The reference implementations (as well as the source for the book) can be found at [munificent/craftinginterpreters](github.com/munificent/craftinginterpreters).
 
 ## Dependencies
 
