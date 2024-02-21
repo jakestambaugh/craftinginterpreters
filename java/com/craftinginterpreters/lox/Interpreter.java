@@ -82,7 +82,7 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
       }
     }
 
-    environment.define(stmt.name.lexeme, null);
+    environment.define(stmt.name.lexeme(), null);
 
     if (stmt.superclass != null) {
       environment = new Environment(environment);
@@ -91,11 +91,11 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
 
     Map<String, LoxFunction> methods = new HashMap<>();
     for (Stmt.Function method : stmt.methods) {
-      LoxFunction function = new LoxFunction(method, environment, method.name.lexeme.equals("init"));
-      methods.put(method.name.lexeme, function);
+      LoxFunction function = new LoxFunction(method, environment, method.name.lexeme().equals("init"));
+      methods.put(method.name.lexeme(), function);
     }
 
-    LoxClass klass = new LoxClass(stmt.name.lexeme, (LoxClass)superclass, methods);
+    LoxClass klass = new LoxClass(stmt.name.lexeme(), (LoxClass)superclass, methods);
 
     if (superclass != null) {
       environment = environment.enclosing;
@@ -114,7 +114,7 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
   @Override
   public Void visitFunctionStmt(Stmt.Function stmt) {
     LoxFunction function = new LoxFunction(stmt, environment, false);
-    environment.define(stmt.name.lexeme, function);
+    environment.define(stmt.name.lexeme(), function);
     return null;
   }
 
@@ -150,7 +150,7 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
       value = evaluate(stmt.initializer);
     }
 
-    environment.define(stmt.name.lexeme, value);
+    environment.define(stmt.name.lexeme(), value);
     return null;
   }
 
@@ -180,7 +180,7 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     Object left = evaluate(expr.left);
     Object right = evaluate(expr.right);
 
-    switch (expr.operator.type) {
+    switch (expr.operator.type()) {
       case BANG_EQUAL:
         return !isEqual(left, right);
       case EQUAL_EQUAL:
@@ -269,7 +269,7 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
   public Object visitLogicalExpr(Expr.Logical expr) {
     Object left = evaluate(expr.left);
 
-    if (expr.operator.type == TokenType.OR) {
+    if (expr.operator.type() == TokenType.OR) {
       if (isTruthy(left)) return left;
     } else {
       if (!isTruthy(left)) return left;
@@ -299,11 +299,11 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     // "this" is always one level nearer than "super"'s environment.
     LoxInstance object = (LoxInstance)environment.getAt(distance - 1, "this");
 
-    LoxFunction method = superclass.findMethod(expr.method.lexeme);
+    LoxFunction method = superclass.findMethod(expr.method.lexeme());
 
     if (method == null) {
       throw new RuntimeError(expr.method,
-          "Undefined property '" + expr.method.lexeme + "'.");
+          "Undefined property '" + expr.method.lexeme() + "'.");
     }
 
     return method.bind(object);
@@ -318,7 +318,7 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
   public Object visitUnaryExpr(Expr.Unary expr) {
     Object right = evaluate(expr.right);
 
-    switch (expr.operator.type) {
+    switch (expr.operator.type()) {
       case BANG:
         return !isTruthy(right);
       case MINUS:
@@ -338,7 +338,7 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
   private Object lookUpVariable(Token name, Expr expr) {
     Integer distance = locals.get(expr);
     if (distance != null) {
-      return environment.getAt(distance, name.lexeme);
+      return environment.getAt(distance, name.lexeme());
     } else {
       return globals.get(name);
     }

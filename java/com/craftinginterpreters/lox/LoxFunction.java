@@ -21,7 +21,7 @@ class LoxFunction implements LoxCallable {
 
   @Override
   public String toString() {
-    return "<fn " + declaration.name.lexeme + ">";
+    return "<fn " + declaration.name.lexeme() + ">";
   }
 
   @Override
@@ -33,7 +33,7 @@ class LoxFunction implements LoxCallable {
   public Object call(Interpreter interpreter, List<Object> arguments) {
     Environment environment = new Environment(closure);
     for (int i = 0; i < declaration.params.size(); i++) {
-      environment.define(declaration.params.get(i).lexeme, arguments.get(i));
+      environment.define(declaration.params.get(i).lexeme(), arguments.get(i));
     }
 
     try {

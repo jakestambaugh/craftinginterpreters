@@ -45,7 +45,7 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void> {
     declare(stmt.name);
     define(stmt.name);
 
-    if (stmt.superclass != null && stmt.name.lexeme.equals(stmt.superclass.name.lexeme)) {
+    if (stmt.superclass != null && stmt.name.lexeme().equals(stmt.superclass.name.lexeme())) {
       Lox.error(stmt.superclass.name, "A class cannot inherit from itself.");
     }
 
@@ -64,7 +64,7 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void> {
 
     for (Stmt.Function method : stmt.methods) {
       FunctionType declaration = FunctionType.METHOD;
-      if (method.name.lexeme.equals("init")) {
+      if (method.name.lexeme().equals("init")) {
         declaration = FunctionType.INITIALIZER;
       }
       resolveFunction(method, declaration);
@@ -214,7 +214,7 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void> {
   @Override
   public Void visitThisExpr(Expr.This expr) {
     if (currentClass == ClassType.NONE) {
-      Lox.error(expr.keyword, 
+      Lox.error(expr.keyword,
           "Cannot use 'this' outside of a class.");
       return null;
     }
@@ -231,7 +231,7 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void> {
 
   @Override
   public Void visitVariableExpr(Expr.Variable expr) {
-    if (!scopes.isEmpty() && scopes.peek().get(expr.name.lexeme) == Boolean.FALSE) {
+    if (!scopes.isEmpty() && scopes.peek().get(expr.name.lexeme()) == Boolean.FALSE) {
       Lox.error(expr.name, "Cannot read local variable in its own initializer.");
     }
 
@@ -279,21 +279,21 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void> {
     if (scopes.isEmpty()) return;
 
     Map<String, Boolean> scope = scopes.peek();
-    if (scope.containsKey(name.lexeme)) {
+    if (scope.containsKey(name.lexeme())) {
       Lox.error(name,
           "Variable with this name already declared in this scope.");
     }
-    scope.put(name.lexeme, false);
+    scope.put(name.lexeme(), false);
   }
 
   private void define(Token name) {
     if (scopes.isEmpty()) return;
-    scopes.peek().put(name.lexeme, true);
+    scopes.peek().put(name.lexeme(), true);
   }
 
   private void resolveLocal(Expr expr, Token name) {
     for (int i = scopes.size() - 1; i >= 0; i--) {
-      if (scopes.get(i).containsKey(name.lexeme)) {
+      if (scopes.get(i).containsKey(name.lexeme())) {
         interpreter.resolve(expr, scopes.size() - 1 - i);
         return;
       }
