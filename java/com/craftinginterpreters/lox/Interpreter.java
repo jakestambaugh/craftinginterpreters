@@ -72,9 +72,8 @@ class Interpreter {
     }
   }
 
-  public Void visitBlockStmt(Stmt.Block stmt) {
+  public void visitBlockStmt(Stmt.Block stmt) {
     executeBlock(stmt.statements(), new Environment(environment));
-    return null;
   }
 
   private Object evaluate(Expr expr) {
@@ -94,7 +93,7 @@ class Interpreter {
     };
   }
 
-  public Void visitClassStmt(Stmt.Class stmt) {
+  public void visitClassStmt(Stmt.Class stmt) {
     Object superclass = null;
     if (stmt.superclass() != null) {
       superclass = evaluate(stmt.superclass());
@@ -123,36 +122,31 @@ class Interpreter {
     }
 
     environment.assign(stmt.name(), klass);
-    return null;
   }
 
-  public Void visitExpressionStmt(Stmt.Expression stmt) {
+  public void visitExpressionStmt(Stmt.Expression stmt) {
     evaluate(stmt.expression());
-    return null;
   }
 
-  public Void visitFunctionStmt(Stmt.Function stmt) {
+  public void visitFunctionStmt(Stmt.Function stmt) {
     LoxFunction function = new LoxFunction(stmt, environment, false);
     environment.define(stmt.name().lexeme(), function);
-    return null;
   }
 
-  public Void visitIfStmt(Stmt.If stmt) {
+  public void visitIfStmt(Stmt.If stmt) {
     if (isTruthy(evaluate(stmt.condition()))) {
       execute(stmt.thenBranch());
     } else if (stmt.elseBranch() != null) {
       execute(stmt.elseBranch());
     }
-    return null;
   }
 
-  public Void visitPrintStmt(Stmt.Print stmt) {
+  public void visitPrintStmt(Stmt.Print stmt) {
     Object value = evaluate(stmt.expression());
     System.out.println(stringify(value));
-    return null;
   }
 
-  public Void visitReturnStmt(Stmt.Return stmt) {
+  public void visitReturnStmt(Stmt.Return stmt) {
     Object value = null;
     if (stmt.value() != null)
       value = evaluate(stmt.value());
@@ -160,21 +154,19 @@ class Interpreter {
     throw new Return(value);
   }
 
-  public Void visitVarStmt(Stmt.Var stmt) {
+  public void visitVarStmt(Stmt.Var stmt) {
     Object value = null;
     if (stmt.initializer() != null) {
       value = evaluate(stmt.initializer());
     }
 
     environment.define(stmt.name().lexeme(), value);
-    return null;
   }
 
-  public Void visitWhileStmt(Stmt.While stmt) {
+  public void visitWhileStmt(Stmt.While stmt) {
     while (isTruthy(evaluate(stmt.condition()))) {
       execute(stmt.body());
     }
-    return null;
   }
 
   public Object visitAssignExpr(Expr.Assign expr) {

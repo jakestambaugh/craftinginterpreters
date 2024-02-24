@@ -29,14 +29,13 @@ class Resolver {
 
   private ClassType currentClass = ClassType.NONE;
 
-  public Void visitBlockStmt(Stmt.Block stmt) {
+  public void visitBlockStmt(Stmt.Block stmt) {
     beginScope();
     resolve(stmt.statements());
     endScope();
-    return null;
   }
 
-  public Void visitClassStmt(Stmt.Class stmt) {
+  public void visitClassStmt(Stmt.Class stmt) {
     ClassType enclosingClass = currentClass;
     currentClass = ClassType.CLASS;
 
@@ -74,28 +73,25 @@ class Resolver {
       endScope();
 
     currentClass = enclosingClass;
-    return null;
   }
 
-  public Void visitExpressionStmt(Stmt.Expression stmt) {
+  public void visitExpressionStmt(Stmt.Expression stmt) {
     resolve(stmt.expression());
-    return null;
   }
 
-  public Void visitIfStmt(Stmt.If stmt) {
+  public void visitIfStmt(Stmt.If stmt) {
     resolve(stmt.condition());
     resolve(stmt.thenBranch());
-    if (stmt.elseBranch() != null)
+    if (stmt.elseBranch() != null) {
       resolve(stmt.elseBranch());
-    return null;
+    }
   }
 
-  public Void visitPrintStmt(Stmt.Print stmt) {
+  public void visitPrintStmt(Stmt.Print stmt) {
     resolve(stmt.expression());
-    return null;
   }
 
-  public Void visitReturnStmt(Stmt.Return stmt) {
+  public void visitReturnStmt(Stmt.Return stmt) {
     if (currentFunction == FunctionType.NONE) {
       Lox.error(stmt.keyword(), "Cannot return from top-level code.");
     }
@@ -107,82 +103,67 @@ class Resolver {
       }
       resolve(stmt.value());
     }
-
-    return null;
   }
 
-  public Void visitWhileStmt(Stmt.While stmt) {
+  public void visitWhileStmt(Stmt.While stmt) {
     resolve(stmt.condition());
     resolve(stmt.body());
-    return null;
   }
 
-  public Void visitVarStmt(Stmt.Var stmt) {
+  public void visitVarStmt(Stmt.Var stmt) {
     declare(stmt.name());
     if (stmt.initializer() != null) {
       resolve(stmt.initializer());
     }
     define(stmt.name());
-    return null;
   }
 
-  public Void visitFunctionStmt(Stmt.Function stmt) {
+  public void visitFunctionStmt(Stmt.Function stmt) {
     declare(stmt.name());
     define(stmt.name());
 
     resolveFunction(stmt, FunctionType.FUNCTION);
-    return null;
   }
 
-  public Void visitAssignExpr(Expr.Assign expr) {
+  public void visitAssignExpr(Expr.Assign expr) {
     resolve(expr.value());
     resolveLocal(expr, expr.name());
-    return null;
   }
 
-  public Void visitBinaryExpr(Expr.Binary expr) {
+  public void visitBinaryExpr(Expr.Binary expr) {
     resolve(expr.left());
     resolve(expr.right());
-    return null;
   }
 
-  public Void visitCallExpr(Expr.Call expr) {
+  public void visitCallExpr(Expr.Call expr) {
     resolve(expr.callee());
-
     for (Expr argument : expr.arguments()) {
       resolve(argument);
     }
-
-    return null;
   }
 
-  public Void visitGetExpr(Expr.Get expr) {
+  public void visitGetExpr(Expr.Get expr) {
     resolve(expr.object());
-    return null;
   }
 
-  public Void visitGroupingExpr(Expr.Grouping expr) {
+  public void visitGroupingExpr(Expr.Grouping expr) {
     resolve(expr.expression());
-    return null;
   }
 
-  public Void visitLiteralExpr(Expr.Literal expr) {
-    return null;
+  public void visitLiteralExpr(Expr.Literal expr) {
   }
 
-  public Void visitLogicalExpr(Expr.Logical expr) {
+  public void visitLogicalExpr(Expr.Logical expr) {
     resolve(expr.left());
     resolve(expr.right());
-    return null;
   }
 
-  public Void visitSetExpr(Expr.Set expr) {
+  public void visitSetExpr(Expr.Set expr) {
     resolve(expr.value());
     resolve(expr.object());
-    return null;
   }
 
-  public Void visitSuperExpr(Expr.Super expr) {
+  public void visitSuperExpr(Expr.Super expr) {
     if (currentClass == ClassType.NONE) {
       Lox.error(expr.keyword(),
           "Cannot use 'super' outside of a class.");
@@ -192,32 +173,28 @@ class Resolver {
     }
 
     resolveLocal(expr, expr.keyword());
-    return null;
   }
 
-  public Void visitThisExpr(Expr.This expr) {
+  public void visitThisExpr(Expr.This expr) {
     if (currentClass == ClassType.NONE) {
       Lox.error(expr.keyword(),
           "Cannot use 'this' outside of a class.");
-      return null;
+      return;
     }
 
     resolveLocal(expr, expr.keyword());
-    return null;
   }
 
-  public Void visitUnaryExpr(Expr.Unary expr) {
+  public void visitUnaryExpr(Expr.Unary expr) {
     resolve(expr.right());
-    return null;
   }
 
-  public Void visitVariableExpr(Expr.Variable expr) {
+  public void visitVariableExpr(Expr.Variable expr) {
     if (!scopes.isEmpty() && scopes.peek().get(expr.name().lexeme()) == Boolean.FALSE) {
       Lox.error(expr.name(), "Cannot read local variable in its own initializer.");
     }
 
     resolveLocal(expr, expr.name());
-    return null;
   }
 
   private void resolve(Stmt stmt) {
