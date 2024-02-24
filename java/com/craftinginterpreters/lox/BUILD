@@ -20,7 +20,6 @@ java_library(
     ),
     deps = [
         ":token",
-        "//java/com/craftinginterpreters/tool:ast",
     ],
 )
 
