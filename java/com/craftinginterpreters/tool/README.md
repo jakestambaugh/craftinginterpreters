@@ -1,0 +1,1 @@
+Since the lox package has been converted to Java 21 records and switch types, there isn't much use for this tools directory. The classes that this generates will be incompatible with the new stuff.
